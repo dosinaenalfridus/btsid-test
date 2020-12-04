@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const { ensureAuth, ensureGuest } = require('../midlleware/auth')
-const Story = require('../models/Story')
+const Shoping = require('../models/Shoping')
+const User = require('../models/User')
 
-//@desc Login/Landing page
+//@desc Login
 //@router   GET /
 router.get('/', ensureGuest, (req, res) =>{
     res.render('login',{
@@ -11,21 +12,54 @@ router.get('/', ensureGuest, (req, res) =>{
     })
 })
 
-//@desc Dashboard
-//@router   GET /dasboard
-router.get('/dashboard', ensureAuth, async (req, res) =>{
+//@desc GetAll User
+//@router   GET /alluser
+router.get('/alluser', ensureAuth, async (req, res) =>{
     try {
-        const stories = await Story.find({ user: req.user.id}).lean()
-        res.render('dashboard', {
+        const User = await User.find().lean()
+        res.JSON('dashboard', {
             name: req.user.firstName,
-            stories
         })
     } catch (err) {
         console.error(err)
-        res.render('error/500')
     }
-
-    
 })
+
+//@desc Create new Shoping
+//@router   POST /addshoping
+router.post('/addshoping', ensureAuth, async (req, res) => {
+    try {
+        req.body.user = req.user.id
+        await Shoping.create(req.body)
+    } catch (error) {
+        console.error(err)
+    }
+});
+
+//@desc GET all shoping
+//@router   GET /allshoping
+router.get('/allshoping', ensureAuth, async (req, res) =>{
+    try {
+        const Shoping = await Shoping.find().lean()
+        res.JSON('dashboard', {
+            name: req.user.firstName,
+        })
+    } catch (err) {
+        console.error(err)
+    }
+});
+
+//@desc GET shoping by id
+//@router   GET /shoping_id
+router.get('/shoping_id', ensureAuth, async (req, res) =>{
+    try {
+        const Shoping = await Shoping.findById(req.params.id).lean()
+        res.JSON('dashboard', {
+            name: req.user.firstName,
+        })
+    } catch (err) {
+        console.error(err)
+    }
+});
 
 module.exports = router;
