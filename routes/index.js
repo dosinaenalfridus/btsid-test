@@ -7,19 +7,15 @@ const User = require('../models/User')
 //@desc Login
 //@router   GET /
 router.get('/', ensureGuest, (req, res) =>{
-    res.render('login',{
-        layout:'login',
-    })
+    console.log('login with google account sucsses')
 })
 
 //@desc GetAll User
 //@router   GET /alluser
 router.get('/alluser', ensureAuth, async (req, res) =>{
     try {
-        const User = await User.find().lean()
-        res.JSON('dashboard', {
-            name: req.user.firstName,
-        })
+        const user = await User.find().lean()
+        console.log(user)
     } catch (err) {
         console.error(err)
     }
@@ -40,10 +36,8 @@ router.post('/addshoping', ensureAuth, async (req, res) => {
 //@router   GET /allshoping
 router.get('/allshoping', ensureAuth, async (req, res) =>{
     try {
-        const Shoping = await Shoping.find().lean()
-        res.JSON('dashboard', {
-            name: req.user.firstName,
-        })
+        const shoping = await Shoping.find().lean()
+        console.log(shoping)
     } catch (err) {
         console.error(err)
     }
@@ -53,10 +47,8 @@ router.get('/allshoping', ensureAuth, async (req, res) =>{
 //@router   GET /shoping_id
 router.get('/shoping_id', ensureAuth, async (req, res) =>{
     try {
-        const Shoping = await Shoping.findById(req.params.id).lean()
-        res.JSON('dashboard', {
-            name: req.user.firstName,
-        })
+        const shoping = await Shoping.findById(req.params.id).lean()
+        console.log(shoping)
     } catch (err) {
         console.error(err)
     }
